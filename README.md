@@ -56,7 +56,7 @@
 
 ### KERNEL_SOURCE
 
-Change this to your kernel repository url.
+Change this to your kernel repository link.
 
 For example: `https://github.com/Jbub5/android_kernel_xiaomi_mt6768`
 
@@ -87,7 +87,7 @@ For example: `arm64`
 
 ### ENABLE_KERNELSU
 
-Enable KernelSU for troubleshooting kernel failures or compiling the kernel separately.
+Enable [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) support.
 
 #### KERNELSU_TAG
 
@@ -111,25 +111,27 @@ You can type `ksud debug get-sign <apk_path>` to get the size and hash of the ap
 
 #### KSU_REVERT
 
-This will revoke the commit that dropped non-GKI support.
+This will revert the [commit](https://github.com/tiann/KernelSU/commit/898e9d4f8ca9b2f46b0c6b36b80a872b5b88d899) that removed non-GKI support, making it possible to continue using [official KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) up to version [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1). Using versions newer than [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1) is not possible due to the removal of non-GKI support from the manager.
 
 #### ADD_KPROBES_CONFIG
 
-Inject parameters into the defconfig automatically.
+This is used in the installation of [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) via kprobe. If kprobe is broken in your kernel or you don't know what it is then don't touch this config.
+
+See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#integrate-with-kprobe
 
 #### KSU_HOOKS_PATCH
 
-If kprobe does not work in your kernel, then try enabling this option, this will automatically modify kernel source code to support KernelSU.  
+If kprobe does not work in your kernel, then try enabling this option, this will automatically patch kernel source code to support [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html).
 
-See also: [Intergrate for non-GKI devices](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source)
+See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source
 
 ### ADD_OVERLAYFS_CONFIG
 
-This option provides support for overlayfs. Inject parameters into defconfig automatically.
+If enabled will automatically put the configs needed for OverlayFS into your defconfig.
 
 ### ADD_APATCH_SUPPORT
 
-This option provides support for overlayfs. Inject parameters into defconfig automatically.
+If enabled will automatically put the configs needed for [APatch](https://apatch.dev/what-is-apatch.html) into your defconfig.
 
 #### FIX_APATCH_OPENELA
 
