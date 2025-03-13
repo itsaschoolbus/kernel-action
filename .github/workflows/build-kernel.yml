@@ -251,6 +251,7 @@ jobs:
     - name: Build kernel
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        mkdir out
         if [ ${{ env.USE_CUSTOM_GCC }} = true ]; then
             if [ ${{ env.USE_CUSTOM_GCC_64 }} = true ]; then
                 export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-64/bin:$PATH
