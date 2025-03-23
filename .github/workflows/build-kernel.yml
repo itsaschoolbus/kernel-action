@@ -66,7 +66,7 @@ jobs:
 
         wget "$url" -O "$file"
         mkdir -p gcc
-        tar -xvJf "$file" -C gcc
+        tar --strip-components=1 -xvJf "$file" -C gcc
         
     - name: Download mkbootimg tools
       if: env.BUILD_BOOT_IMG == 'true'
