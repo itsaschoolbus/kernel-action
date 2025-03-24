@@ -43,7 +43,10 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
         
     - name: Download Clang
+<<<<<<< HEAD
       if: env.GCC != 'true'
+=======
+>>>>>>> parent of f2f5e35 (Update build-kernel.yml)
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         clanglink=$(wget -qO- https://raw.githubusercontent.com/ZyCromerZ/Clang/refs/heads/main/Clang-main-link.txt)
@@ -60,7 +63,6 @@ jobs:
         esac
         
     - name: Download GCC
-      if: env.GCC == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         url="https://snapshots.linaro.org/gnu-toolchain/14.0-2023.06-1/aarch64-linux-gnu/gcc-linaro-14.0.0-2023.06-x86_64_aarch64-linux-gnu.tar.xz"
