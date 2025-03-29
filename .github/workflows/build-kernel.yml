@@ -92,6 +92,7 @@ jobs:
             KSU_VERSION="_$(cd KernelSU && expr $(/usr/bin/git rev-list --count HEAD) + 10200)"
         else
             KSU_VERSION=""
+        fi
 
     - name: Download source boot image
       if: env.BUILD_BOOT_IMG == 'true'
