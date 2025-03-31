@@ -43,22 +43,17 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
         
     - name: Download Clang
+      if: env.GCC != 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        clanglink=$(wget -qO- https://raw.githubusercontent.com/ZyCromerZ/Clang/refs/heads/main/Clang-main-link.txt)
-        file=$(basename "$clanglink")
-
-        wget "$clanglink" -O "$file"
         mkdir -p clang
-
-        case "$file" in
-          *.tar.gz) tar -xvzf "$file" -C clang ;;
-          *.tar.xz) tar -xvJf "$file" -C clang ;;
-          *.zip) unzip "$file" -d clang ;;
-          *) echo "Unsupported file format"; exit 1 ;;
-        esac
+        cd clang
+        curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
+        chmod +x antman
+        ./antman -S
         
     - name: Download GCC
+      if: env.GCC == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         url="https://snapshots.linaro.org/gnu-toolchain/14.0-2023.06-1/aarch64-linux-gnu/gcc-linaro-14.0.0-2023.06-x86_64_aarch64-linux-gnu.tar.xz"
@@ -116,7 +111,11 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         mkdir out
-        export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH
+        if [[ ${{ env.GCC }} == "true" ]]; then
+          export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
+        else
+          export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
+        fi
         export KBUILD_BUILD_HOST=github-actions
         export KBUILD_BUILD_USER=itsaschoolbus
         nproc --all
