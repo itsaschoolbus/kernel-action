@@ -113,11 +113,14 @@ jobs:
         mkdir out
         if [[ ${{ env.GCC }} == "true" ]]; then
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
+          ls $GITHUB_WORKSPACE/kernel_workspace/gcc/bin
         else
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
+          ls $GITHUB_WORKSPACE/kernel_workspace/clang/bin
         fi
         export KBUILD_BUILD_HOST=github-actions
         export KBUILD_BUILD_USER=itsaschoolbus
+        export ARCH=${{ env.KERNEL_ARCH }}
         nproc --all
         make -j$(nproc --all) -C $(pwd) O=$(pwd)/out ARCH=${{ env.KERNEL_ARCH }} ${{ env.EXTRA_CMDS }} ${{ env.KERNEL_CONFIG }}
         make -j$(nproc --all) -C $(pwd) O=$(pwd)/out ARCH=${{ env.KERNEL_ARCH }} ${{ env.EXTRA_CMDS }}
