@@ -112,9 +112,9 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         mkdir out
         if [[ ${{ env.GCC }} == "true" ]]; then
-          export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
-        else
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
+        else
+          export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
         fi
         export KBUILD_BUILD_HOST=github-actions
         export KBUILD_BUILD_USER=itsaschoolbus
