@@ -85,6 +85,7 @@ jobs:
         fi
 
     - name: Setup KernelSU-Next
+      if: env.KERNELSU == 'true'
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
