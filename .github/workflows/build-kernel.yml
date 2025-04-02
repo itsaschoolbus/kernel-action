@@ -112,10 +112,8 @@ jobs:
     - name: Check toolchain
       run: |
         if [[ ${{ env.GCC }} == "true" ]]; then
-          export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
           ls $GITHUB_WORKSPACE/kernel_workspace/gcc/bin
         else
-          export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
           ls $GITHUB_WORKSPACE/kernel_workspace/clang/bin
         fi
 
@@ -126,6 +124,11 @@ jobs:
         export KBUILD_BUILD_HOST=github-actions
         export KBUILD_BUILD_USER=itsaschoolbus
         export ARCH=${{ env.KERNEL_ARCH }}
+        if [[ ${{ env.GCC }} == "true" ]]; then
+          export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
+        else
+          export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
+        fi
         nproc --all
         if [[ ${{ env.ENABLE_CCACHE }} == "true" ]]; then
           export CCACHE=ccache
