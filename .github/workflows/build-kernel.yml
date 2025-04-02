@@ -51,8 +51,10 @@ jobs:
         curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
         chmod +x antman
         ./antman -S
+        export ORIGHOME=$HOME
         export HOME=$GITHUB_WORKSPACE/kernel_workspace
         ./antman --patch=glibc
+        export HOME=$ORIGHOME
         
     - name: Download GCC
       if: env.GCC == 'true'
@@ -109,10 +111,8 @@ jobs:
         key: build-kernel-${{ env.DEVICE }}${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}
         max-size: 2G
 
-    - name: Build kernel
+    - name: Check toolchain
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        mkdir out
         if [[ ${{ env.GCC }} == "true" ]]; then
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH"
           ls $GITHUB_WORKSPACE/kernel_workspace/gcc/bin
@@ -120,6 +120,11 @@ jobs:
           export PATH="$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH"
           ls $GITHUB_WORKSPACE/kernel_workspace/clang/bin
         fi
+
+    - name: Build kernel
+      run: |
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        mkdir out
         export KBUILD_BUILD_HOST=github-actions
         export KBUILD_BUILD_USER=itsaschoolbus
         export ARCH=${{ env.KERNEL_ARCH }}
@@ -168,7 +173,7 @@ jobs:
             unzip AnyKernel3.zip -d AnyKernel3/
         fi
         cp android-kernel/out/arch/${{ env.KERNEL_ARCH }}/boot/${{ env.KERNEL_IMAGE_NAME }} AnyKernel3/
-        if [ ${{ env.CHECK_DTBO_IS_OK }} = true ]; then
+        if [ ${{ env.CHECK_DTBO_IS_OK }} == 'true' ]; then
             cp android-kernel/out/arch/${{ env.KERNEL_ARCH }}/boot/dtbo.img AnyKernel3/
         fi
         rm -rf AnyKernel3/.git* AnyKernel3/README.md
