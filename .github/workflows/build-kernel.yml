@@ -51,10 +51,8 @@ jobs:
         curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
         chmod +x antman
         ./antman -S
-        export ORIGHOME=$HOME
         export HOME=$GITHUB_WORKSPACE/kernel_workspace
         ./antman --patch=glibc
-        export HOME=$ORIGHOME
         
     - name: Download GCC
       if: env.GCC == 'true'
