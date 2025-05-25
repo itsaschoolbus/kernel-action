@@ -66,12 +66,6 @@ Change this to your kernel branch.
 
 For example: `kernel-tree`
 
-### KERNEL_CONFIG
-
-Change this to your kernel defconfig name.
-
-For example: `lancelot_defconfig`
-
 ### KERNEL_IMAGE_NAME
 
 Change this to the kernel binary that needs to be flashed, generally consistent with `BOARD_KERNEL_IMAGE_NAME` in your AOSP device tree.
