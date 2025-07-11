@@ -46,7 +46,7 @@ jobs:
       run: |
         echo "BUILD_TIME=$(TZ=UTC date "+%Y%m%d%H%M")" >> $GITHUB_ENV
         sudo apt-get update
-        sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 binutils-aarch64-linux-gnu musl
+        sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 binutils-aarch64-linux-gnu musl zstd
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
     - name: Download AOSP Clang
@@ -69,6 +69,10 @@ jobs:
             wget -nv -O clang.tar.xz ${{ env.CUSTOM_CLANG_SOURCE }}
             mkdir clang
             tar -C clang/ -Jxvf clang.tar.xz
+        elif [[ ${{ env.CUSTOM_CLANG_SOURCE }} == *'.tar.zst' ]]; then
+            wget -nv -O clang.tar.zst ${{ env.CUSTOM_CLANG_SOURCE }}
+            mkdir clang
+            tar -C clang/ -I zstd -xf clang.tar.zst
         elif [[ ${{ env.CUSTOM_CLANG_SOURCE }} == *'.git' ]]; then
             git clone ${{ env.CUSTOM_CLANG_SOURCE }} -b ${{ env.CUSTOM_CLANG_BRANCH }} clang --depth=1
         else
@@ -111,6 +115,10 @@ jobs:
                 wget -nv -O gcc-64.xz ${{ env.CUSTOM_GCC_64_SOURCE }}
                 mkdir gcc-64
                 tar -C gcc-64/ -Jxvf gcc-64.xz
+            elif [[ ${{ env.CUSTOM_GCC_64_SOURCE }} == *'.tar.zst' ]]; then
+                wget -nv -O gcc-64.tar.zst ${{ env.CUSTOM_GCC_64_SOURCE }}
+                mkdir gcc-64
+                tar -C gcc-64/ -I zstd -xf gcc-64.tar.zst
             elif [[ ${{ env.CUSTOM_GCC_64_SOURCE }} == *'.git' ]]; then
                 git clone ${{ env.CUSTOM_GCC_64_SOURCE }} -b ${{ env.CUSTOM_GCC_64_BRANCH }} gcc-64 --depth=1
             else
@@ -131,6 +139,10 @@ jobs:
                 wget -nv -O gcc-32.xz ${{ env.CUSTOM_GCC_32_SOURCE }}
                 mkdir gcc-32
                 tar -C gcc-32/ -Jxvf gcc-32.xz
+            elif [[ ${{ env.CUSTOM_GCC_32_SOURCE }} == *'.tar.zst' ]]; then
+                wget -nv -O gcc-32.tar.zst ${{ env.CUSTOM_GCC_32_SOURCE }}
+                mkdir gcc-32
+                tar -C gcc-32/ -I zstd -xf gcc-32.tar.zst
             elif [[ ${{ env.CUSTOM_GCC_32_SOURCE }} == *'.git' ]]; then
                 git clone ${{ env.CUSTOM_GCC_32_SOURCE }} -b ${{ env.CUSTOM_GCC_32_BRANCH }} gcc-32 --depth=1
             else
@@ -339,6 +351,10 @@ jobs:
             wget -nv -O AnyKernel3.tar.xz ${{ env.CUSTOM_ANYKERNEL3_SOURCE }}
             mkdir AnyKernel3
             tar -C AnyKernel3/ -Jxvf AnyKernel3.tar.xz
+        elif [[ ${{ env.CUSTOM_ANYKERNEL3_SOURCE }} == *'.tar.zst' ]]; then
+            wget -nv -O AnyKernel3.tar.zst ${{ env.CUSTOM_ANYKERNEL3_SOURCE }}
+            mkdir AnyKernel3
+            tar -C AnyKernel3/ -I zstd -xf clang.tar.zst
         elif [[ ${{ env.CUSTOM_ANYKERNEL3_SOURCE }} == *'.git' ]]; then
             git clone ${{ env.CUSTOM_ANYKERNEL3_SOURCE }} -b ${{ env.CUSTOM_ANYKERNEL3_BRANCH }} --depth=1 AnyKernel3
         else
