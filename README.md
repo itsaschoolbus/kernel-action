@@ -238,6 +238,10 @@ LTO is used to optimize the kernel but sometimes causes errors.
 
 Sometimes even a harmless warning breaks the build.
 
+### ENABLE_PYTHON2
+
+Many old kernels require python2 to build them, enable it if you need it.
+
 ### FIX_WIFI_SPEED
 
 Switching to other drivers fixed spontaneous reboots when turning on Wi-Fi on some devices, but resulted in decreased network speeds. This option will revert to the previous drivers and thus fix the network speed.

@@ -50,6 +50,7 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
     - name: Install python2
+      if: env.ENABLE_PYTHON2 == 'true'
       run: |
         mkdir -p ~/python2-jammy && cd ~/python2-jammy
         wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7_2.7.18-13ubuntu1.5_amd64.deb
