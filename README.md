@@ -1,263 +1,152 @@
-# Kernel Build Action For Lancelot & Merlin
+<div align="start">
+  <h1>Kernel Build Action for Lancelot & Merlin</h1>
+  <h3><i>Powered By GitHub Actions</i></h3>
+</div>
 
-## Step-by-step guide to use
+A workflow to automatically build an Android kernel
+
+## Usage Guide
+
+> [!NOTE]
+> You will need a GitHub account.
+
 <details>
-  <summary><i>Click to open</i></summary>
+  <summary><i>Click to expand</i></summary>
 
->### 1.
->![01](guide/images/01.png)
+> ### 1.
+> ![01](guide/images/01.png)
 
->### 2.
->![02](guide/images/02.png)
-> **Note:** Unselect `Copy the kernel-tree_lancelot branch only` if you are building for merlin.
+> ### 2.
+> ![02](guide/images/02.png)
 
->### 3.
->![03](guide/images/03.png)
+> ### 3.
+> ![03](guide/images/03.png)
 
->### 4.
->![04](guide/images/04.png)
+> ### 4.
+> ![04](guide/images/04.png)
 
->### 5.
->![05](guide/images/05.png)
+> ### 5.
+> ![05](guide/images/05.png)
 
->### 6.
->![06](guide/images/06.png)
+> ### 6.
+> ![06](guide/images/06.png)
 
->### 7.
->![07](guide/images/07.png)
+> ### 7.
+> ![07](guide/images/07.png)
 
->### 8.
->![08](guide/images/08.png)
+> ### 8.
+> ![08](guide/images/08.png)
 
->### 9.
->![09](guide/images/09.png)
+> ### 9.
+> ![09](guide/images/09.png)
 
->### 10.
->![10](guide/images/10.png)
+> ### 10.
+> ![10](guide/images/10.png)
 
->### 11.
->![11](guide/images/11.png)
+> ### 11.
+> ![11](guide/images/11.png)
 > **Note:** Reload this page if the yellow circle does not appear.
 
->### 12.
->![12](guide/images/12.png)
+> ### 12.
+> ![12](guide/images/12.png)
 
->### 13.
->![13](guide/images/13.png)
+> ### 13.
+> ![13](guide/images/13.png)
 
->### 14.
->![14](guide/images/14.png)
-  
+> ### 14.
+> ![14](guide/images/14.png)
+
 </details>
-<br>
 
 ## Options Guide
+
+> [!NOTE]
 > All options are located in [config.env](config.env)
 
-### KERNEL_SOURCE
-
-Change this to your kernel repository link.
-
-For example: `https://github.com/Jbub5/android_kernel_xiaomi_mt6768`
-
-### KERNEL_SOURCE_BRANCH
-
-Change this to your kernel branch.
-
-For example: `kernel-tree`
-
-### KERNEL_IMAGE_NAME
-
-Change this to the kernel binary that needs to be flashed, generally consistent with `BOARD_KERNEL_IMAGE_NAME` in your AOSP device tree.
-
-For example: `Image.gz-dtb`
-
-Common names include `Image`, `Image.gz`.
-
-### KERNEL_ARCH
-
-For example: `arm64`
-
-
-### ENABLE_KERNELSU
-
-Enable [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) support.
-
-#### KERNELSU_TAG
-
-[KernelSU 1.0 no longer supports non-GKI kernels](https://github.com/tiann/KernelSU/issues/1705). The last supported version is [v0.9.5](https://github.com/tiann/KernelSU/tree/v0.9.5), please make sure to use the correct branch.
-
-Select the branch or tag of KernelSU:
-
-- ~~main branch (development version): `KERNELSU_TAG=main`~~
-- Latest TAG (stable version): `KERNELSU_TAG=v0.9.5`
-- Specify the TAG (such as `v0.5.2`): `KERNELSU_TAG=v0.5.2`
-
-#### KSU_EXPECTED_SIZE and KSU_EXPECTED_HASH
-
-Customize the size and hash values of the KernelSU manager signature, if you don't need to customize the manager then please leave them empty or fill in the official default values:
-
-`KSU_EXPECTED_SIZE=0x033b`
-
-`KSU_EXPECTED_HASH=c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6`
-
-You can type `ksud debug get-sign <apk_path>` to get the size and hash of the apk signature.
-
-#### KSU_REVERT
-
-This will revert the [commit](https://github.com/tiann/KernelSU/commit/898e9d4f8ca9b2f46b0c6b36b80a872b5b88d899) that removed non-GKI support, making it possible to continue using [official KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) up to version [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1). Using versions newer than [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1) is not possible due to the removal of non-GKI support from the manager.
-
-#### ADD_KPROBES_CONFIG
-
-This is used in the installation of [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) via kprobe. If kprobe is broken in your kernel or you don't know what it is then don't touch this config.
-
-See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#integrate-with-kprobe
-
-#### KSU_HOOKS_PATCH
-
-If kprobe does not work in your kernel, then try enabling this option, this will automatically patch kernel source code to support [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html).
-
-See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source
-
-### ADD_OVERLAYFS_CONFIG
-
-If enabled will automatically put the configs needed for OverlayFS into your defconfig.
-
-### ADD_APATCH_SUPPORT
-
-If enabled will automatically put the configs needed for [APatch](https://apatch.dev/what-is-apatch.html) into your defconfig.
-
-#### FIX_APATCH_OPENELA
-
-This option provides fix for https://github.com/bmax121/APatch/issues/400.
-
-### OLD_ANDROID_SUPPORT
-
-> There is no official support for older Android and MIUI, and bug reports will not be accepted on them.
-
-This option provides support for MIUI 12.5 and custom ROMs based on Android 11 through 12, but breaks support for Android 13 and above.
-
-
-### USE_CUSTOM_CLANG
-
-You can use a non-official clang such as [proton-clang](https://github.com/kdrag0n/proton-clang).
-
-#### CUSTOM_CLANG_SOURCE
-
-> Fill in a link that includes `.git` if it is a git repository.
-
-Git repository or direct chain of compressed zip files is supported.
-
-#### CUSTOM_CLANG_BRANCH
-
-For example: `main`
-
-
-### CLANG_BRANCH
-
-Due to [#23](https://github.com/xiaoleGun/KernelSU_Action/issues/23), we provide an option to customize the Google main branch. The main ones include:
-| Clang Branch |
-| ------------ |
-| master |
-| master-kernel-build-2021 |
-| master-kernel-build-2022 |
-
-Or other branches, please search for them according to your own needs at https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86.
-
-#### CLANG_VERSION
-
-Enter the Clang version to use.
-
-| Clang Version | Corresponding Android Version | AOSP-Clang Version |
-| ------------- | ----------------------------- | ------------------ |
-| 12.0.5        | Android S                     | r416183b           |
-| 14.0.6        | Android T                     | r450784d           |
-| 14.0.7        |                               | r450784e           |
-| 15.0.1        |                               | r458507            |
-| 17.0.1        |                               | r487747b           |
-| 17.0.2        | Android U                     | r487747c           |
-
-Generally, Clang12 can compile most of the 4.14 and above kernels. My MI 6X 4.19 uses r450784d.
-
-### ENABLE_GCC_AOSP
-Enables usage of standart GCC toolchain.
-
-#### ENABLE_GCC_ARM64
-
-Enable GCC 64C cross-compiler.
-
-#### ENABLE_GCC_ARM32
-
-Enable GCC 32C cross-compiler.
-
-
-### EXTRA_CMDS
-
-Some kernels require additional compilation commands to compile correctly. Generally, no other commands are needed, so please search for information about your kernel. Please separate the command and the command with a space.
-
-For example: `LLVM=1 LLVM_IAS=1`
-
-
-### USE_CUSTOM_ANYKERNEL3
-
-Can use custom AnyKernel3.
-
-#### CUSTOM_ANYKERNEL3_SOURCE
-
-> If it is a git repository, please fill in the link containing `.git`
-
-Supports direct links to git repositories or zip compressed packages.
-
-#### CUSTOM_ANYKERNEL3_BRANCH
-
-Customize the warehouse branch of AnyKernel3.
-
-
-### NEED_DTBO
-
-Upload DTBO. Some devices require it.
-
-### BUILD_BOOT_IMG
-
-> Added from previous workflows, view historical commits
-
-Build boot.img, and you need to provide a `Source boot image`.
-
-### SOURCE_BOOT_IMAGE
-
-As the name suggests, it provides a boot image source system that can boot normally and requires a direct chain, preferably from the same kernel source and AOSP device tree as your current system. Ramdisk contains the partition table and init, without which the compiled image will not boot up properly.
-
-For example: `https://raw.githubusercontent.com/xiaoleGun/KernelSU_action/main/boot/boot-wayne-from-Miku-UI-latest.img`
-
-
-### DISABLE_LTO
-
-LTO is used to optimize the kernel but sometimes causes errors.
-
-### DISABLE_CC_WERROR
-
-Sometimes even a harmless warning breaks the build.
-
-### ENABLE_PYTHON2
-
-Many old kernels require python2 to build them, enable it if you need it.
-
-### FIX_WIFI_SPEED
-
-Switching to other drivers fixed spontaneous reboots when turning on Wi-Fi on some devices, but resulted in decreased network speeds. This option will revert to the previous drivers and thus fix the network speed.
-
-### REMOVE_UNUSED_PACKAGES
-
-To clean unnecessary packages and free up more disk space. If you need these packages, please disable this option.
-
-### ENABLE_CCACHE
-
-Enable the cache to make the second kernel compile faster (or slower).
-
-
-## Thanks
-
-- [AnyKernel3](https://github.com/osm0sis/AnyKernel3)
-- [AOSP](https://android.googlesource.com)
-- [KernelSU](https://github.com/tiann/KernelSU)
-- [xiaoxindada](https://github.com/xiaoxindada)
+| Base section options | Optional | Description | Example value |
+|---------------------|----------|-------------|----------------|
+| KERNEL_SOURCE | <div align="center">❌</div> | Link to kernel repository | `https://github.com/Jbub5/android_kernel_xiaomi_mt6768` |
+| KERNEL_SOURCE_BRANCH | <div align="center">❌</div> | Branch name of kernel repository | <div align="center">`kernel-tree`</div> |
+| KERNEL_ARCH | <div align="center">❌</div> | The Linux kernel architecture | <div align="center">`arm64`</div> |
+| KERNEL_IMAGE_NAME | <div align="center">❌</div> | Format of the kernel image for flashable AnyKernel3 zip | <div align="center">`Image.gz-dtb`</div> |
+
+<br>
+
+| KernelSU section options | Optional | Description | Example value |
+|--------------------------|----------|-------------|---------------|
+| ENABLE_KERNELSU | <div align="center">✅</div> | Enables accounting for the KernelSU options written below | <div align="center">`true`</div> |
+| KERNELSU_SETUP_SOURCE | <div align="center">❌</div> | Link to KernelSU setup script | `https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh` |
+| KERNELSU_TAG | <div align="center">✅</div> | Repository branch or tag of KernelSU | <div align="center">`v1.0.1`</div> |
+| ADD_KPROBES_CONFIG | <div align="center">✅</div> | Apply [patches](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#integrate-with-kprobe) kernel source code to support KernelSU installation via kprobe | <div align="center">`false`</div> |
+| KSU_HOOKS_PATCH | <div align="center">✅</div> | Apply [patches](https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source) kernel source code to support KernelSU | <div align="center">`false`</div> |
+| KSU_REVERT | <div align="center">✅</div> | Revert the [commit](https://github.com/tiann/KernelSU/commit/898e9d4f8ca9b2f46b0c6b36b80a872b5b88d899) that removed non-GKI kernel support | <div align="center">`true`</div> |
+<!-- | KSU_EXPECTED_SIZE | idk | idk | idk | -->
+<!-- | KSU_EXPECTED_HASH | idk | idk | idk | -->
+> [!IMPORTANT]
+> [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) [no longer supports non-GKI kernels](https://github.com/tiann/KernelSU/issues/1705) after version [v1.0.0](https://github.com/tiann/KernelSU/releases/tag/v1.0.0). The last supported version is [v0.9.5](https://github.com/tiann/KernelSU/releases/tag/v0.9.5), please make sure to use the correct tag.
+
+<br>
+
+| APatch section options | Optional | Description | Example value |
+|------------------------|----------|-------------|---------------|
+| ADD_APATCH_SUPPORT | <div align="center">✅</div> | Add [required configs](https://apatch.dev/install.html#install-requirements) for [APatch](https://apatch.dev/what-is-apatch.html) and accounting for options written below | <div align="center">`false`</div> |
+| FIX_APATCH_OPENELA | <div align="center">✅</div> | Apply fix for https://github.com/bmax121/APatch/issues/400 | <div align="center">`false`</div> |
+
+<br>
+
+| Compiler section options | Optional | Description | Example value |
+|--------------------------|----------|-------------|---------------|
+| USE_CLANG | <div align="center">✅</div> | Enable Clang toolchain usage and accounting for options written below | <div align="center">`true`</div> |
+| CLANG_SOURCE | <div align="center">❌</div> | Link to clang archive or repository | `https://github.com/ZyCromerZ/Clang/releases/download/21.0.0git-20250415-release/Clang-21.0.0git-20250415.tar.gz` |
+| CLANG_BRANCH | <div align="center">✅</div> | Branch name of clang repository | <div align="center">`main`</div> |
+| USE_GCC | <div align="center">✅</div> | Enable GCC toolchain usage and accounting for options written below | <div align="center">`false`</div> |
+| USE_GCC_64 | <div align="center">✅</div> | Enable GCC 64-bit | <div align="center">`true`</div> |
+| GCC_64_SOURCE | <div align="center">❌</div> | Link to GCC 64-bit archive or repository | `https://snapshots.linaro.org/gnu-toolchain/14.0-2023.06-1/aarch64-linux-gnu/gcc-linaro-14.0.0-2023.06-x86_64_aarch64-linux-gnu.tar.xz` |
+| GCC_64_BRANCH | <div align="center">✅</div> | Branch name of GCC 64-bit repository | <div align="center">`main`</div> |
+| USE_GCC_32 | <div align="center">✅</div> | Enable GCC 32-bit | <div align="center">`true`</div> |
+| GCC_32_SOURCE | <div align="center">❌</div> | Link to GCC 32-bit archive or repository | `https://snapshots.linaro.org/gnu-toolchain/14.0-2023.06-1/arm-linux-gnueabihf/gcc-linaro-14.0.0-2023.06-x86_64_arm-linux-gnueabihf.tar.xz` |
+| GCC_32_BRANCH | <div align="center">✅</div> | Branch name of GCC 32-bit repository | <div align="center">`main`</div> |
+> [!IMPORTANT]
+> You can use only Clang or GCC, but not both at the same time.
+
+<br>
+
+| Anykernel3 section options | Optional | Description | Example value |
+|----------------------------|----------|-------------|---------------|
+| USE_ANYKERNEL3 | <div align="center">✅</div> | Enable creating flashable AnyKernel3 zip and accounting for options written below | <div align="center">`true`</div> |
+| ANYKERNEL3_SOURCE | <div align="center">❌</div> | Link to AnyKernel3 source | `https://github.com/Jbub5/AnyKernel3.git` |
+| ANYKERNEL3_BRANCH | <div align="center">✅</div> | Branch name of AnyKernel3 repository | <div align="center">`proton`</div> |
+
+<br>
+
+| Build section options | Optional | Description | Example value |
+|-----------------------|----------|-------------|---------------|
+| EXTRA_CMDS | <div align="center">✅</div> | Additional compiler options | `LLVM=1 LLVM_IAS=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- CONFIG_NO_ERROR_ON_MISMATCH=y TARGET_BUILD_VARIANT=user` |
+| DISABLE_LTO | <div align="center">✅</div> | [LTO](https://llvm.org/docs/LinkTimeOptimization.html) is used to optimize the kernel but sometimes causes errors | <div align="center">`false`</div> |
+| DISABLE_CC_WERROR | <div align="center">✅</div> | Disable CONFIG_CC_WERROR | <div align="center">`false`</div> |
+| ENABLE_PYTHON2 | <div align="center">✅</div> | Many old kernels require python2 to build them | <div align="center">`false`</div> |
+| ENABLE_CCACHE | <div align="center">✅</div> | Enable [ccache](https://ccache.dev) | <div align="center">`false`</div> |
+| REMOVE_UNUSED_PACKAGES| <div align="center">✅</div> | Remove unnecessary packages and free up more disk space for builder | <div align="center">`false`</div> |
+| NEED_DTBO | <div align="center">✅</div> | Upload DTBO | <div align="center">`false`</div> |
+| BUILD_BOOT_IMG | <div align="center">✅</div> | Repack boot.img by replacing the kernel in it with the compiled kernel | <div align="center">`false`</div> |
+| SOURCE_BOOT_IMAGE | <div align="center">✅</div> | Link to the original boot.img for repackage it | `https://raw.githubusercontent.com/xiaoleGun/KernelSU_action/main/boot/boot.img` |
+
+<br>
+
+| Misc section options | Optional | Description | Example value |
+|----------------------|----------|-------------|---------------|
+| OLD_ANDROID_SUPPORT | <div align="center">✅</div> | Enable support for MIUI 12.5 and custom ROMs based on Android 11 through 12 | <div align="center">`false`</div> |
+| ADD_OVERLAYFS_CONFIG | <div align="center">✅</div> | Automatically put the configs needed for OverlayFS into your defconfig | <div align="center">`false`</div> |
+> [!IMPORTANT]
+> Enabling OLD_ANDROID_SUPPORT breaks support for Android 13+.
+
+<br>
+
+| Proton specific section options | Optional | Description | Example value |
+|----------------------------------|----------|-------------|---------------|
+| FIX_WIFI_SPEED | <div align="center">✅</div> | Rollback to old connectivity drivers that have better Wi-Fi speed, but cause spontaneous reboots on some devices | <div align="center">`false`</div> |
+
+## Credits
+
+- [xiaoleGun](https://github.com/xiaoleGun) for base
+- [dabao1955](https://github.com/dabao1955) for format of README.md
