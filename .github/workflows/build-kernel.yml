@@ -34,7 +34,7 @@ jobs:
         echo "BUILD_TIME=$(TZ=UTC date "+%Y%m%d%H%M")" >> $GITHUB_ENV
         echo "DEVICE=$(echo ${{ env.KERNEL_CONFIG }} | sed 's!vendor/!!;s/_defconfig//;s/_user//;s/-perf//')" >> $GITHUB_ENV
         sudo apt-get update
-        sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32ncurses-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses6 libncurses-dev libsdl1.2-dev libssl-dev libwxgtk3.2-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
+        sudo apt-get install -y axel bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32ncurses-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses6 libncurses-dev libsdl1.2-dev libssl-dev libwxgtk3.2-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
     - name: Install python2
@@ -57,9 +57,8 @@ jobs:
     - name: Download toolchain
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        CLANG_VERSION="clang-r547379"
-        wget -q "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/${CLANG_VERSION}.tgz"
-        mkdir clang && tar -xf "${CLANG_VERSION}.tgz" -C clang && rm "${CLANG_VERSION}.tgz"
+        axel https://github.com/itsaschoolbus/tc_builds/releases/download/CPK-Clang-23.0.0git/CPK-Clang-23.0.0git.tar.gz -o clang.tar.gz
+        mkdir clang && tar -xzvf clang.tar.gz -C clang && rm clang.tar.gz
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git gcc
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git gcc32
 
