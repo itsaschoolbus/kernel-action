@@ -89,11 +89,12 @@ jobs:
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         rm -rf KernelSU
         curl -LSs "$KERNELSU_SETUP_SOURCE" | bash -s ${{ env.KERNELSU_TAG }}
-        KSU_VERSION="_$(cd $(echo "$KERNELSU_SETUP_SOURCE" | cut -d/ -f5) || cd KernelSU && expr $(git rev-list --count HEAD) + 10200)"
+        KSU_VERSION="_$(cd $(echo "$KERNELSU_SETUP_SOURCE" | cut -d/ -f5) || cd KernelSU && expr $(git rev-list --count HEAD) + 30700)"
         echo "UPLOADNAME=-$(echo "$KERNELSU_SETUP_SOURCE" | cut -d/ -f5)$KSU_VERSION" >> $GITHUB_ENV
         if [ ${{ env.KSU_REVERT }} = true ]; then
             git apply $GITHUB_WORKSPACE/patches/KSU_REVERT.patch
         fi
+        cd KernelSU && curl https://github.com/itsaschoolbus/ReSukiSU/commit/a71191e017f8bb04360cd55d29c4101c51bf1f88.patch | patch -p1
 
     - name: Build kernel
       run: |
@@ -101,8 +102,8 @@ jobs:
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc/bin:$PATH
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH
-        export KBUILD_BUILD_USER=allbecauseofthat
-        export KBUILD_BUILD_HOST=fuckingmeteorite
+        export KBUILD_BUILD_USER=allbecauseofth
+        export KBUILD_BUILD_HOST=tdamnmeteorite
         export CC=clang
         export HOSTCC=clang
         export HOSTCXX=clang++
