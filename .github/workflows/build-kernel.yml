@@ -108,7 +108,9 @@ jobs:
         export HOSTCC=clang
         export HOSTCXX=clang++
         TZ=Asia/Bangkok make -j$(nproc --all) CC=clang O=out ARCH=${{ env.KERNEL_ARCH }} SUBARCH=arm64 LLVM=1 LLVM_IAS=1 ${{ env.EXTRA_CMDS }} ${{ env.KERNEL_CONFIG }}
+        echo '167' > out/.version
         TZ=Asia/Bangkok make -j$(nproc --all) CC=clang O=out ARCH=${{ env.KERNEL_ARCH }} SUBARCH=arm64 LLVM=1 LLVM_IAS=1 ${{ env.EXTRA_CMDS }}
+        cat out/.version
         find "out/arch/arm64/boot/dts/vendor/qcom" -name '*.dtb' -exec cat {} + >"out/arch/arm64/boot/dtb"
 
     - name: Check kernel output files
