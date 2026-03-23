@@ -57,7 +57,7 @@ jobs:
     - name: Download toolchain
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        axel https://github.com/itsaschoolbus/tc_builds/releases/download/CPK-Clang-23.0.0git/CPK-Clang-23.0.0git.tar.gz -o clang.tar.gz
+        axel https://github.com/itsaschoolbus-stuff/clang-mirror/releases/download/clang-r584948b-aosp/clang.tar.gz
         mkdir clang && tar -xzvf clang.tar.gz -C clang && rm clang.tar.gz
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git gcc
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git gcc32
@@ -104,6 +104,8 @@ jobs:
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang/bin:$PATH
         export KBUILD_BUILD_USER=allbecauseofth
         export KBUILD_BUILD_HOST=tdamnmeteorite
+        export KBUILD_COMPILER_STRING="Yachiyo clang version 8000"
+        export KBUILD_LINKER_STRING="Kaguya LLD 168"
         export CC=clang
         export HOSTCC=clang
         export HOSTCXX=clang++
