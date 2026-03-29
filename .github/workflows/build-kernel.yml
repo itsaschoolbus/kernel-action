@@ -94,7 +94,7 @@ jobs:
         if [ ${{ env.KSU_REVERT }} = true ]; then
             git apply $GITHUB_WORKSPACE/patches/KSU_REVERT.patch
         fi
-        cd KernelSU && curl https://github.com/itsaschoolbus/ReSukiSU/commit/a71191e017f8bb04360cd55d29c4101c51bf1f88.patch | patch -p1
+        #cd KernelSU && curl https://github.com/itsaschoolbus/ReSukiSU/commit/a71191e017f8bb04360cd55d29c4101c51bf1f88.patch | patch -p1
 
     - name: Build kernel
       run: |
