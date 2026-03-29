@@ -57,7 +57,7 @@ jobs:
     - name: Download toolchain
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        axel https://github.com/itsaschoolbus-stuff/clang-mirror/releases/download/clang-r584948b-aosp/clang.tar.gz
+        axel https://github.com/itsaschoolbus-stuff/clang-mirror/releases/download/clang-r596125-aosp/clang.tar.gz
         mkdir clang && tar -xzvf clang.tar.gz -C clang && rm clang.tar.gz
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git gcc
         git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git gcc32
@@ -109,11 +109,9 @@ jobs:
         export CC=clang
         export HOSTCC=clang
         export HOSTCXX=clang++
-        TZ=Asia/Bangkok make -j$(nproc --all) CC=clang O=out ARCH=${{ env.KERNEL_ARCH }} SUBARCH=arm64 LLVM=1 LLVM_IAS=1 ${{ env.EXTRA_CMDS }} ${{ env.KERNEL_CONFIG }}
+        TZ=Asia/Bangkok make -j$(nproc --all) CC=clang O=out ARCH=${{ env.KERNEL_ARCH }} SUBARCH=arm64 ${{ env.EXTRA_CMDS }} ${{ env.KERNEL_CONFIG }}
         echo '167' > out/.version
         TZ=Asia/Bangkok make -j$(nproc --all) CC=clang O=out ARCH=${{ env.KERNEL_ARCH }} SUBARCH=arm64 LLVM=1 LLVM_IAS=1 ${{ env.EXTRA_CMDS }}
-        cat out/.version
-        find "out/arch/arm64/boot/dts/vendor/qcom" -name '*.dtb' -exec cat {} + >"out/arch/arm64/boot/dtb"
 
     - name: Check kernel output files
       run: |
